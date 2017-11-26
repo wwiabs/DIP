@@ -22,22 +22,22 @@ public:
 	Point_();
 	Point_(T _x, T _y);
 
-	//¸³Öµ
+	//èµ‹å€¼
 	//Point_& operator = (const Point_& pt);
 
-	//!  TÀàĞÍ×ª»»³ÉT2  example below
+	//!  Tç±»å‹è½¬æ¢æˆT2  example below
 	//!  Point_<T> pt;
 	//!  Point_<T2> pt2 = pt;
 	template<class T2> operator Point_<T2>() const;
 
-	////> ÅĞ¶ÏµãÊÇ·ñÔÚ¾ØĞÎÄÚ
+	////> åˆ¤æ–­ç‚¹æ˜¯å¦åœ¨çŸ©å½¢å†…
 	//bool inside(const Rect_<T>& rect) const;
-	////> ÅĞ¶ÏµãÊÇ·ñÔÚÔ²ÄÚ
+	////> åˆ¤æ–­ç‚¹æ˜¯å¦åœ¨åœ†å†…
 	//bool inside(const Circle_<T>& c) const;
 
 	Point_<T> at_direction(const int) const;
 
-	T x, y; //< the point coordinates   x¶ÔÓ¦Ë®Æ½·½Ïò£¬y¶ÔÓ¦ÊúÖ±·½Ïò
+	T x, y; //< the point coordinates   xå¯¹åº”æ°´å¹³æ–¹å‘ï¼Œyå¯¹åº”ç«–ç›´æ–¹å‘
 };
 
 typedef Point_<int> Point2i;
@@ -53,16 +53,16 @@ template<class T> class Rect_
 {
 public:
 	Rect_();
-	//×óÉÏ½Çºá×ø±êºÍ×İ×ø±ê ºÍ ¿í ¸ß
+	//å·¦ä¸Šè§’æ¨ªåæ ‡å’Œçºµåæ ‡ å’Œ å®½ é«˜
 	Rect_(T _x, T _y, T _width, T _height);
 
 
 	//Rect_& operator = (const Rect_& r);
 
-	//// ¾ØĞÎÃæ»ı
+	//// çŸ©å½¢é¢ç§¯
 	//T area() const;
 
-	// ÅĞ¶Ï¾ØĞÎÊÇ·ñ°üº¬µã
+	// åˆ¤æ–­çŸ©å½¢æ˜¯å¦åŒ…å«ç‚¹
 	//bool contains(const Point_<T>& pt) const;
 
 	//! conversion to another data type
@@ -85,24 +85,24 @@ template<class T> class Circle_
 public:
 	// various constructors
 	Circle_();
-	// Ô²ĞÄºá×ø±ê¡¢×İ×ø±ê ÒÔ¼°°ë¾¶
+	// åœ†å¿ƒæ¨ªåæ ‡ã€çºµåæ ‡ ä»¥åŠåŠå¾„
 	Circle_(T _x, T _y, T r);
-	// Ô²ĞÄ ºÍ °ë¾¶
+	// åœ†å¿ƒ å’Œ åŠå¾„
 	Circle_(const Point_<T>& pt, T r);
 	//Circle_(const Circle_& pt);
 
 	//Circle_& operator = (const Circle_& c);
 
-	// Ô²ÊÇ·ñ°üº¬µã
+	// åœ†æ˜¯å¦åŒ…å«ç‚¹
 	//bool contains(const Point_<T>& pt) const;
-	// Ô²Ãæ»ı £¬·µ»ØdoubleÀàĞÍ
+	// åœ†é¢ç§¯ ï¼Œè¿”å›doubleç±»å‹
 	double area() const;
-	//! ÅĞ¶ÏÊÇ·ñÎª¿Õ ,¿ÕÔòtrue
+	//! åˆ¤æ–­æ˜¯å¦ä¸ºç©º ,ç©ºåˆ™true
 	//bool empty() const;
 	//! conversion to another data type
 	template<class T2> operator Circle_<T2>() const;
 
-	T x, y, radius; //< ºá¡¢×İ×ø±êºÍ°ë¾¶
+	T x, y, radius; //< æ¨ªã€çºµåæ ‡å’ŒåŠå¾„
 };
 
 typedef Circle_<int> Circle2i;
@@ -193,13 +193,13 @@ template<class T> inline
 	}
 }
 
-template<class T> inline
+template<class T> static inline
 	T dot(const Point_<T>& pt1, const Point_<T>& pt2)
 {
 	return static_cast<T>(pt1.x*pt2.x + pt1.y*pt2.y);
 }
 
-template<class T> inline
+template<class T> static inline
 	double cross(const Point_<T>& pt1, const Point_<T>& pt2)
 {
 	return double(pt1.x*pt2.y - pt1.y*pt2.x);
