@@ -54,7 +54,7 @@ public:
 		}
 	}
   
-  inline T* ptr() const{
+  	inline T* ptr() const{
 		return (T*)m_data;
 	}
 
