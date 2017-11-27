@@ -21,9 +21,9 @@
 #ifndef BITMAP_MODIFIED_H
 #define BITMAP_MODIFIED_H
 
-#include <iostream>
+//#include <iostream>
 #include <fstream>
-#include <string>
+//#include <string>
 #include "data_type.h"
 #ifndef __LITTLE_ENDIAN__
 #ifndef __BIG_ENDIAN__
@@ -101,8 +101,8 @@ public:
 		Dispose();
 	}
 
-	CBitmap(const char* Filename, uchar* data) : m_BitmapData(0), m_BitmapSize(0) {
-		Load(Filename, data);
+	CBitmap(const char* Filename) : m_BitmapData(0), m_BitmapSize(0) {
+		Load(Filename);
 	}
 
 	~CBitmap() {
@@ -120,7 +120,7 @@ public:
 
 	/* Load specified Bitmap and stores it as RGBA in an internal buffer */
 
-	bool Load(const char *Filename, uchar* data) {
+	bool Load(const char *Filename) {
 		std::ifstream file(Filename, std::ios::binary | std::ios::in);
 
 		if (file.bad()) {
@@ -141,7 +141,7 @@ public:
 		file.read((char*)&m_BitmapHeader, sizeof(BITMAP_HEADER));
 
 		m_BitmapSize = GetWidth() * GetHeight();
-		data = new uchar[m_BitmapSize*m_BitmapHeader.BitCount / 8];
+		m_BitmapData = new uchar[m_BitmapSize*m_BitmapHeader.BitCount / 8];
 
 		unsigned int LineWidth = ((GetWidth() * GetBitCount() / 8) + 3) & ~3;
 		unsigned ByteWidth = GetWidth() * GetBitCount() / 8;
@@ -153,8 +153,8 @@ public:
 		bool Result = false;
 
 		if (m_BitmapHeader.Compression == 0 && (m_BitmapHeader.BitCount == 8 || m_BitmapHeader.BitCount == 24)) {
-			uchar* newline = data;
-			for (unsigned int i = 0; i < GetHeight(); i++) {
+			uchar* newline = m_BitmapData;
+			for (unsigned i = 0; i < GetHeight(); i++) {
 				file.read((char*)newline, ByteWidth);
 				file.seekg(pad, std::ios::cur);
 				newline += GetWidth() * m_BitmapHeader.BitCount / 8;
@@ -208,9 +208,9 @@ public:
 	//}
 
 
-	//void* GetBits() {
-	//	return m_BitmapData;
-	//}
+	void* GetBits() {
+		return m_BitmapData;
+	}
 
 };
 
