@@ -37,7 +37,7 @@ using std::vector;
 }
 
 //找外轮廓  外轮廓标记按顺序排列
-vector<vector<Point>> find_out_contour_lable_seq(Image& img)
+vector<vector<Point>> find_out_contour_lable_seq(const Image& img)
 {
 	vector<vector<Point>> contours;
 	uchar lable = 0;
@@ -79,7 +79,7 @@ vector<vector<Point>> find_out_contour_lable_seq(Image& img)
 }
 
 // 标记不一定按顺序
-vector<vector<Point>> find_out_contour_label_not_seq(Image_<uint>& img, const int& size)
+vector<vector<Point>> find_out_contour_label_not_seq(const Image_<uint>& img, const int& size)
 {
 	vector<vector<Point>> contours(size);
 	uchar* lable = new uchar[size + 1]();
