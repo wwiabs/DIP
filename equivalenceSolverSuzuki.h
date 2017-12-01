@@ -27,8 +27,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
-#include <vector>
-#include "memoryTester.h"
 
 // "STANDARD" VERSION
 //Find the root of the tree of node i
@@ -99,66 +97,66 @@ LabelT flattenL(LabelT *P, LabelT length){
 
 // "MEMORY TEST" VERSION
 //Find the root of the tree of node i
-template<typename LabelT>
-inline static
-LabelT findRoot(memVector<LabelT> &P, LabelT i){
-	LabelT root = i;
-	while (P[root] < root){
-		root = P[root];
-	}
-	return root;
-}
-
-//Make all nodes in the path of node i point to root
-template<typename LabelT>
-inline static
-void setRoot(memVector<LabelT> &P, LabelT i, LabelT root){
-	while (P[i] < i){
-		LabelT j = P[i];
-		P[i] = root;
-		i = j;
-	}
-	P[i] = root;
-}
-
-//Find the root of the tree of the node i and compress the path in the process
-template<typename LabelT>
-inline static
-LabelT find(memVector<LabelT> &P, LabelT i){
-	LabelT root = findRoot(P, i);
-	setRoot(P, i, root);
-	return root;
-}
-
-//unite the two trees containing nodes i and j and return the new root
-template<typename LabelT>
-inline static
-LabelT set_union(memVector<LabelT> &P, LabelT i, LabelT j){
-	LabelT root = findRoot(P, i);
-	if (i != j){
-		LabelT rootj = findRoot(P, j);
-		if (root > rootj){
-			root = rootj;
-		}
-		setRoot(P, j, root);
-	}
-	setRoot(P, i, root);
-	return root;
-}
-
-//Flatten the Union Find tree and relabel the components
-template<typename LabelT>
-inline static
-LabelT flattenL(memVector<LabelT> &P, LabelT length){
-	LabelT k = 1;
-	for (LabelT i = 1; i < length; ++i){
-		if (P[i] < i){
-			P[i] = P[P[i]];
-		}
-		else{
-			P[i] = k; k = k + 1;
-		}
-	}
-	return k;
-}
+//template<typename LabelT>
+//inline static
+//LabelT findRoot(memVector<LabelT> &P, LabelT i){
+//	LabelT root = i;
+//	while (P[root] < root){
+//		root = P[root];
+//	}
+//	return root;
+//}
+//
+////Make all nodes in the path of node i point to root
+//template<typename LabelT>
+//inline static
+//void setRoot(memVector<LabelT> &P, LabelT i, LabelT root){
+//	while (P[i] < i){
+//		LabelT j = P[i];
+//		P[i] = root;
+//		i = j;
+//	}
+//	P[i] = root;
+//}
+//
+////Find the root of the tree of the node i and compress the path in the process
+//template<typename LabelT>
+//inline static
+//LabelT find(memVector<LabelT> &P, LabelT i){
+//	LabelT root = findRoot(P, i);
+//	setRoot(P, i, root);
+//	return root;
+//}
+//
+////unite the two trees containing nodes i and j and return the new root
+//template<typename LabelT>
+//inline static
+//LabelT set_union(memVector<LabelT> &P, LabelT i, LabelT j){
+//	LabelT root = findRoot(P, i);
+//	if (i != j){
+//		LabelT rootj = findRoot(P, j);
+//		if (root > rootj){
+//			root = rootj;
+//		}
+//		setRoot(P, j, root);
+//	}
+//	setRoot(P, i, root);
+//	return root;
+//}
+//
+////Flatten the Union Find tree and relabel the components
+//template<typename LabelT>
+//inline static
+//LabelT flattenL(memVector<LabelT> &P, LabelT length){
+//	LabelT k = 1;
+//	for (LabelT i = 1; i < length; ++i){
+//		if (P[i] < i){
+//			P[i] = P[P[i]];
+//		}
+//		else{
+//			P[i] = k; k = k + 1;
+//		}
+//	}
+//	return k;
+//}
 // "MEMORY TEST" VERSION

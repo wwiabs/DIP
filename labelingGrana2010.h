@@ -27,16 +27,17 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
-#include "opencv2/opencv.hpp"
-#include "memoryTester.h"
+//#include "opencv2/opencv.hpp"
+//#include "memoryTester.h"
 #include "equivalenceSolverSuzuki.h"
+#include "image.h"
 
 // Readable version of Grana's algorithm
-int BBDT(const cv::Mat1b &img, cv::Mat1i &imgLabels);
+//int BBDT(const cv::Mat1b &img, cv::Mat1i &imgLabels);
 
 // Optimized version of Grana's algorithm
-int BBDT_OPT(const cv::Mat1b &img, cv::Mat1i &imgLabels);
+int BBDT_OPT(const Image &img, Image_<uint> &imgLabels);
 
 //  Version of Grana's algorithm which provides memory accesses details
-int BBDT_MEM(const cv::Mat1b &img, std::vector<unsigned long int> &accesses);
+//int BBDT_MEM(const cv::Mat1b &img, std::vector<unsigned long int> &accesses);
 //int BBDT_MEM(const cv::Mat1b &img, cv::Mat1i &a);
