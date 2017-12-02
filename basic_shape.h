@@ -403,7 +403,7 @@ template<class T> template<class T2> inline
 template <class T> inline
 	bool Circle_<T>::contains(const Point_<T>& pt) const
 {
-	return distance(Point_<T>(x, y), pt) <= radius + EPS;
+	return distance(Point_<T>(x, y), pt) < radius + EPS;
 }
 
 template <class T> inline
