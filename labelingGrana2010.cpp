@@ -26,8 +26,8 @@
 // OR TORT(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "stdafx.h"
-//#include "equivalenceSolverSuzuki.h"
-#include "labelingGrana2010.h"
+#include "equivalenceSolverSuzuki.h"
+//#include "labelingGrana2010.h"
 
 //inline static
 //void firstScanBBDT(const Mat1b &img, Mat1i& imgLabels, uint* P, uint &lunique) {
