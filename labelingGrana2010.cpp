@@ -912,16 +912,16 @@
 
 inline static
 void firstScanBBDT_OPT(const Image &img, Image_<uint>& imgLabels, uint* P, uint &lunique) {
-	int w(img.m_width), h(img.m_height);
+	int w(img.width), h(img.height);
 
 	for (int r = 0; r<h; r += 2) {
 		// Get rows pointer
 		const uchar* const img_row = img.ptr(r);
-		const uchar* const img_row_prev = (uchar *)(((char *)img_row) - img.m_stepsize);
-		const uchar* const img_row_prev_prev = (uchar *)(((char *)img_row_prev) - img.m_stepsize);
-		const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.m_stepsize);
+		const uchar* const img_row_prev = (uchar *)(((char *)img_row) - img.stepsize);
+		const uchar* const img_row_prev_prev = (uchar *)(((char *)img_row_prev) - img.stepsize);
+		const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.stepsize);
 		uint* const imgLabels_row = imgLabels.ptr(r);
-		uint* const imgLabels_row_prev_prev = (uint *)(((char *)imgLabels_row) - imgLabels.m_stepsize - imgLabels.m_stepsize);
+		uint* const imgLabels_row_prev_prev = (uint *)(((char *)imgLabels_row) - imgLabels.stepsize - imgLabels.stepsize);
 		for (int c = 0; c < w; c += 2) {
 
 			// We work with 2x2 blocks
@@ -1965,7 +1965,7 @@ void firstScanBBDT_OPT(const Image &img, Image_<uint>& imgLabels, uint* P, uint 
 
 int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 	//A quick and dirty upper bound for the maximimum number of labels.
-	const size_t Plength = (img.m_height + 1) * (img.m_width + 1) / 4;
+	const size_t Plength = (img.height + 1) * (img.width + 1) / 4;
 	//Tree of labels
 	uint *P = new uint[Plength];
 
@@ -1978,18 +1978,18 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 	uint nLabel = flattenL(P, lunique);
 
 	// Second scan
-	if (imgLabels.m_height & 1){
-		if (imgLabels.m_width & 1){
+	if (imgLabels.height & 1){
+		if (imgLabels.width & 1){
 			//Case 1: both rows and cols odd
-			for (uint r = 0; r<imgLabels.m_height; r += 2) {
+			for (uint r = 0; r<imgLabels.height; r += 2) {
 				// Get rows pointer
 				const uchar* const img_row = img.ptr(r);
-				const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.m_stepsize);
+				const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.stepsize);
 
 				uint* const imgLabels_row = imgLabels.ptr(r);
-				uint* const imgLabels_row_fol = (uint *)(((char *)imgLabels_row) + imgLabels.m_stepsize);
+				uint* const imgLabels_row_fol = (uint *)(((char *)imgLabels_row) + imgLabels.stepsize);
 				// Get rows pointer
-				for (uint c = 0; c<imgLabels.m_width; c += 2) {
+				for (uint c = 0; c<imgLabels.width; c += 2) {
 					int iLabel = imgLabels_row[c];
 					if (iLabel>0) {
 						iLabel = P[iLabel];
@@ -1997,12 +1997,12 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 							imgLabels_row[c] = iLabel;
 						else
 							imgLabels_row[c] = 0;
-						if (c + 1<imgLabels.m_width) {
+						if (c + 1<imgLabels.width) {
 							if (img_row[c + 1]>0)
 								imgLabels_row[c + 1] = iLabel;
 							else
 								imgLabels_row[c + 1] = 0;
-							if (r + 1<imgLabels.m_height) {
+							if (r + 1<imgLabels.height) {
 								if (img_row_fol[c]>0)
 									imgLabels_row_fol[c] = iLabel;
 								else
@@ -2013,7 +2013,7 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 									imgLabels_row_fol[c + 1] = 0;
 							}
 						}
-						else if (r + 1<imgLabels.m_height) {
+						else if (r + 1<imgLabels.height) {
 							if (img_row_fol[c]>0)
 								imgLabels_row_fol[c] = iLabel;
 							else
@@ -2022,14 +2022,14 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 					}
 					else {
 						imgLabels_row[c] = 0;
-						if (c + 1<imgLabels.m_width) {
+						if (c + 1<imgLabels.width) {
 							imgLabels_row[c + 1] = 0;
-							if (r + 1<imgLabels.m_height) {
+							if (r + 1<imgLabels.height) {
 								imgLabels_row_fol[c] = 0;
 								imgLabels_row_fol[c + 1] = 0;
 							}
 						}
-						else if (r + 1<imgLabels.m_height) {
+						else if (r + 1<imgLabels.height) {
 							imgLabels_row_fol[c] = 0;
 						}
 					}
@@ -2038,15 +2038,15 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 		}//END Case 1
 		else{
 			//Case 2: only rows odd
-			for (uint r = 0; r<imgLabels.m_height; r += 2) {
+			for (uint r = 0; r<imgLabels.height; r += 2) {
 				// Get rows pointer
 				const uchar* const img_row = img.ptr(r);
-				const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.m_stepsize);
+				const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.stepsize);
 
 				uint* const imgLabels_row = imgLabels.ptr(r);
-				uint* const imgLabels_row_fol = (uint *)(((char *)imgLabels_row) + imgLabels.m_stepsize);
+				uint* const imgLabels_row_fol = (uint *)(((char *)imgLabels_row) + imgLabels.stepsize);
 				// Get rows pointer
-				for (uint c = 0; c<imgLabels.m_width; c += 2) {
+				for (uint c = 0; c<imgLabels.width; c += 2) {
 					int iLabel = imgLabels_row[c];
 					if (iLabel>0) {
 						iLabel = P[iLabel];
@@ -2058,7 +2058,7 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 							imgLabels_row[c + 1] = iLabel;
 						else
 							imgLabels_row[c + 1] = 0;
-						if (r + 1<imgLabels.m_height) {
+						if (r + 1<imgLabels.height) {
 							if (img_row_fol[c]>0)
 								imgLabels_row_fol[c] = iLabel;
 							else
@@ -2072,7 +2072,7 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 					else {
 						imgLabels_row[c] = 0;
 						imgLabels_row[c + 1] = 0;
-						if (r + 1<imgLabels.m_height) {
+						if (r + 1<imgLabels.height) {
 							imgLabels_row_fol[c] = 0;
 							imgLabels_row_fol[c + 1] = 0;
 						}
@@ -2082,17 +2082,17 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 		}// END Case 2
 	}
 	else{
-		if (imgLabels.m_width & 1){
+		if (imgLabels.width & 1){
 			//Case 3: only cols odd
-			for (uint r = 0; r<imgLabels.m_height; r += 2) {
+			for (uint r = 0; r<imgLabels.height; r += 2) {
 				// Get rows pointer
 				const uchar* const img_row = img.ptr(r);
-				const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.m_stepsize);
+				const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.stepsize);
 
 				uint* const imgLabels_row = imgLabels.ptr(r);
-				uint* const imgLabels_row_fol = (uint *)(((char *)imgLabels_row) + imgLabels.m_stepsize);
+				uint* const imgLabels_row_fol = (uint *)(((char *)imgLabels_row) + imgLabels.stepsize);
 				// Get rows pointer
-				for (uint c = 0; c<imgLabels.m_width; c += 2) {
+				for (uint c = 0; c<imgLabels.width; c += 2) {
 					int iLabel = imgLabels_row[c];
 					if (iLabel>0) {
 						iLabel = P[iLabel];
@@ -2104,7 +2104,7 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 							imgLabels_row_fol[c] = iLabel;
 						else
 							imgLabels_row_fol[c] = 0;
-						if (c + 1<imgLabels.m_width) {
+						if (c + 1<imgLabels.width) {
 							if (img_row[c + 1]>0)
 								imgLabels_row[c + 1] = iLabel;
 							else
@@ -2118,7 +2118,7 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 					else{
 						imgLabels_row[c] = 0;
 						imgLabels_row_fol[c] = 0;
-						if (c + 1<imgLabels.m_width) {
+						if (c + 1<imgLabels.width) {
 							imgLabels_row[c + 1] = 0;
 							imgLabels_row_fol[c + 1] = 0;
 						}
@@ -2128,15 +2128,15 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 		}// END case 3
 		else{
 			//Case 4: nothing odd
-			for (uint r = 0; r < imgLabels.m_height; r += 2) {
+			for (uint r = 0; r < imgLabels.height; r += 2) {
 				// Get rows pointer
 				const uchar* const img_row = img.ptr(r);
-				const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.m_stepsize);
+				const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.stepsize);
 
 				uint* const imgLabels_row = imgLabels.ptr(r);
-				uint* const imgLabels_row_fol = (uint *)(((char *)imgLabels_row) + imgLabels.m_stepsize);
+				uint* const imgLabels_row_fol = (uint *)(((char *)imgLabels_row) + imgLabels.stepsize);
 				// Get rows pointer
-				for (uint c = 0; c<imgLabels.m_width; c += 2) {
+				for (uint c = 0; c<imgLabels.width; c += 2) {
 					int iLabel = imgLabels_row[c];
 					if (iLabel>0) {
 						iLabel = P[iLabel];
