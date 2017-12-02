@@ -5,6 +5,8 @@
 
 #include <algorithm>
 
+#define EPS 1e-8
+#define PI 3.1416
 
 template<class T> class Point_;
 template<class T> class Rect_;
@@ -94,7 +96,7 @@ public:
 	//Circle_& operator = (const Circle_& c);
 
 	// 圆是否包含点
-	//bool contains(const Point_<T>& pt) const;
+	bool contains(const Point_<T>& pt) const;
 	// 圆面积 ，返回double类型
 	double area() const;
 	//! 判断是否为空 ,空则true
@@ -398,16 +400,16 @@ template<class T> template<class T2> inline
 //	return *this;
 //}
 //
-//template <class T> inline
-//	bool Circle_<T>::contains(const Point_<T>& pt) const
-//{
-//	return distance(Point_<T>(x, y), pt) <= radius;
-//}
+template <class T> inline
+	bool Circle_<T>::contains(const Point_<T>& pt) const
+{
+	return distance(Point_<T>(x, y), pt) <= radius + EPS;
+}
 
 template <class T> inline
 	double Circle_<T>::area() const
 {
-	return 3.1416*radius*radius;
+	return PI * radius * radius;
 }
 
 
