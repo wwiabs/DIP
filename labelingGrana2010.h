@@ -29,7 +29,6 @@
 #pragma once
 //#include "opencv2/opencv.hpp"
 //#include "memoryTester.h"
-#include "equivalenceSolverSuzuki.h"
 #include "image.h"
 
 // Readable version of Grana's algorithm
