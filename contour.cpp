@@ -41,10 +41,10 @@ vector<vector<Point>> find_out_contour_lable_seq(const Image& img)
 {
 	vector<vector<Point>> contours;
 	uchar lable = 0;
-	for (uint row = 0; row < img.m_height; row++)
+	for (uint row = 0; row < img.height; row++)
 	{
 		uchar* p = img.ptr(row);
-		for (uint col = 0; col < img.m_width; col++)
+		for (uint col = 0; col < img.width; col++)
 		{
 			if (p[col] > lable)
 			{
@@ -57,7 +57,7 @@ vector<vector<Point>> find_out_contour_lable_seq(const Image& img)
 				{
 					Point neighbor = dot.at_direction(dir);
 					int n = 0;
-					while (*img.ptr(neighbor.y, neighbor.x) == 0 || neighbor.x < 0 || (uint)neighbor.x >= img.m_width || neighbor.y < 0 || (uint)neighbor.y >= img.m_height)
+					while (*img.ptr(neighbor.y, neighbor.x) == 0 || neighbor.x < 0 || (uint)neighbor.x >= img.width || neighbor.y < 0 || (uint)neighbor.y >= img.height)
 					{
 						n++;
 						if (n == 8)  goto end_of_tracing;
@@ -84,10 +84,10 @@ vector<vector<Point>> find_out_contour_label_not_seq(const Image_<uint>& img, co
 	vector<vector<Point>> contours(size);
 	uchar* lable = new uchar[size + 1]();
 	lable[0] = 1;
-	for (uint row = 0; row < img.m_height; row++)
+	for (uint row = 0; row < img.height; row++)
 	{
 		uint* p = img.ptr(row);
-		for (uint col = 0; col < img.m_width; col++)
+		for (uint col = 0; col < img.width; col++)
 		{
 			if (lable[p[col]] == 0)
 			{
@@ -99,7 +99,7 @@ vector<vector<Point>> find_out_contour_label_not_seq(const Image_<uint>& img, co
 				{
 					Point neighbor = dot.at_direction(dir);
 					int n = 0;
-					while (*img.ptr(neighbor.y, neighbor.x) == 0 || neighbor.x < 0 || (uint)neighbor.x >= img.m_width || neighbor.y < 0 || (uint)neighbor.y >= img.m_height)
+					while (*img.ptr(neighbor.y, neighbor.x) == 0 || neighbor.x < 0 || (uint)neighbor.x >= img.width || neighbor.y < 0 || (uint)neighbor.y >= img.height)
 					{
 						n++;
 						if (n == 8)  goto end_of_tracing;
