@@ -28,7 +28,6 @@
 
 #include "equivalenceSolverSuzuki.h"
 #include "image.h"
-//#include "labelingGrana2010.h"
 
 //inline static
 //void firstScanBBDT(const Mat1b &img, Mat1i& imgLabels, uint* P, uint &lunique) {
