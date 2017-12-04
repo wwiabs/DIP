@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "basic_shape.h"
 #include <vector>
 #include "image.h"
