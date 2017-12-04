@@ -27,6 +27,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "equivalenceSolverSuzuki.h"
+#include "image.h"
 //#include "labelingGrana2010.h"
 
 //inline static
