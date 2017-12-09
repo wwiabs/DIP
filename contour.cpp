@@ -40,14 +40,14 @@ vector<vector<Point>> find_out_contour_lable_seq(const Image& img)
 {
 	vector<vector<Point>> contours;
 	uchar lable = 0;
-	for (uint row = 0; row < img.height; row++)
+	for (uint i = 0; i < img.height; i++)
 	{
-		uchar* p = img.ptr(row);
-		for (uint col = 0; col < img.width; col++)
+		uchar* p = img.ptr(i);
+		for (uint j = 0; j < img.width; j++)
 		{
-			if (p[col] > lable)
+			if (p[j] > lable)
 			{
-				Point first_encountered_dot(col, row);
+				Point first_encountered_dot(j, i);
 				contours.resize(lable + 1);
 				contours[lable].push_back(first_encountered_dot);
 				int dir = east;
@@ -83,15 +83,15 @@ vector<vector<Point>> find_out_contour_label_not_seq(const Image_<uint>& img, co
 	vector<vector<Point>> contours(size);
 	uchar* lable = new uchar[size + 1]();
 	lable[0] = 1;
-	for (uint row = 0; row < img.height; row++)
+	for (uint i = 0; i < img.height; i++)
 	{
-		uint* p = img.ptr(row);
-		for (uint col = 0; col < img.width; col++)
+		uint* p = img.ptr(i);
+		for (uint j = 0; j < img.width; j++)
 		{
-			if (lable[p[col]] == 0)
+			if (lable[p[j]] == 0)
 			{
-				Point first_encountered_dot(col, row);
-				contours[p[col] - 1].push_back(first_encountered_dot);
+				Point first_encountered_dot(j, i);
+				contours[p[j] - 1].push_back(first_encountered_dot);
 				int dir = east;
 				Point dot = first_encountered_dot;
 				do
@@ -106,13 +106,13 @@ vector<vector<Point>> find_out_contour_label_not_seq(const Image_<uint>& img, co
 						neighbor = dot.at_direction(dir);
 					}
 
-					contours[p[col] - 1].push_back(dot = neighbor);
+					contours[p[j] - 1].push_back(dot = neighbor);
 
 					CHANGE_NEXT_TRACING_DIRECTION(dir)
 
 				} while (dot != first_encountered_dot);
 
-				end_of_tracing: lable[p[col]] = 1;
+				end_of_tracing: lable[p[j]] = 1;
 			}
 		}
 	}
