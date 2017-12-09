@@ -42,7 +42,7 @@ struct FFillSegment
 };
 
 
-void floodFill(Image& image, int _x, int _y, uchar newVal, const int& flags)
+void floodFill(Image& image, int _x, int _y, uchar newVal, int flags)
 {
 	if (*image.ptr(_y, _x) == newVal) return /*Rect()*/;
 	std::vector<FFillSegment> buffer;
