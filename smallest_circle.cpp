@@ -3,9 +3,9 @@
 
 using std::vector;
 
-static std::random_device rd;
+std::random_device rd;
 
-static std::default_random_engine randGen(rd());
+std::default_random_engine randGen(rd());
 
 Circle2d makeDiameter(const Point &a, const Point &b) {
 	Point2d c(double(a.x + b.x) / 2, double(a.y + b.y) / 2);
@@ -30,7 +30,7 @@ Circle2d makeCircumcircle(const Point &a, const Point &b, const Point &c) {
 }
 
 // Two boundary points known
-static Circle2d makeSmallestEnclosingCircleTwoPoints(const vector<Point> &points, size_t end, const Point &p, const Point &q) {
+Circle2d makeSmallestEnclosingCircleTwoPoints(const vector<Point> &points, size_t end, const Point &p, const Point &q) {
 	Circle2d circ = makeDiameter(p, q);
 	Circle2d left(0, 0, -1);
 	Circle2d right(0, 0, -1);
@@ -65,7 +65,7 @@ static Circle2d makeSmallestEnclosingCircleTwoPoints(const vector<Point> &points
 }
 
 // One boundary point known
-static Circle2d makeSmallestEnclosingCircleOnePoint(const vector<Point> &points, size_t end, const Point &p) {
+Circle2d makeSmallestEnclosingCircleOnePoint(const vector<Point> &points, size_t end, const Point &p) {
 	Circle2d c(p, 0);
 	for (size_t i = 0; i < end; i++) {
 		const Point &q(points.at(i));
