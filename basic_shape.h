@@ -5,8 +5,8 @@
 
 #include <algorithm>
 
-#define EPS 1e-8
-#define PI 3.1416
+const double EPS = 1e-8;
+const double PI = 3.1416;
 
 template<class T> class Point_;
 template<class T> class Rect_;
