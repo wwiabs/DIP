@@ -911,7 +911,7 @@
 //}
 
 inline static
-void firstScanBBDT_OPT(const Image &img, Image_<uint>& imgLabels, uint* P, uint &lunique) {
+void firstScanBBDT_OPT(const Image &img, Image_<unsigned>& imgLabels, unsigned* P, unsigned &lunique) {
 	int w(img.width), h(img.height);
 
 	for (int r = 0; r<h; r += 2) {
@@ -920,8 +920,8 @@ void firstScanBBDT_OPT(const Image &img, Image_<uint>& imgLabels, uint* P, uint 
 		const uchar* const img_row_prev = (uchar *)(((char *)img_row) - img.stepsize);
 		const uchar* const img_row_prev_prev = (uchar *)(((char *)img_row_prev) - img.stepsize);
 		const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.stepsize);
-		uint* const imgLabels_row = imgLabels.ptr(r);
-		uint* const imgLabels_row_prev_prev = (uint *)(((char *)imgLabels_row) - imgLabels.stepsize - imgLabels.stepsize);
+		unsigned* const imgLabels_row = imgLabels.ptr(r);
+		unsigned* const imgLabels_row_prev_prev = (unsigned *)(((char *)imgLabels_row) - imgLabels.stepsize - imgLabels.stepsize);
 		for (int c = 0; c < w; c += 2) {
 
 			// We work with 2x2 blocks
@@ -1963,33 +1963,33 @@ void firstScanBBDT_OPT(const Image &img, Image_<uint>& imgLabels, uint* P, uint 
 
 }
 
-int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
+int BBDT_OPT(const Image &img, Image_<unsigned> &imgLabels) {
 	//A quick and dirty upper bound for the maximimum number of labels.
 	const size_t Plength = (img.height + 1) * (img.width + 1) / 4;
 	//Tree of labels
-	uint *P = new uint[Plength];
+	unsigned *P = new unsigned[Plength];
 
 	//Background
 	P[0] = 0;
-	uint lunique = 1;
+	unsigned lunique = 1;
 
 	firstScanBBDT_OPT(img, imgLabels, P, lunique);
 
-	uint nLabel = flattenL(P, lunique);
+	unsigned nLabel = flattenL(P, lunique);
 
 	// Second scan
 	if (imgLabels.height & 1){
 		if (imgLabels.width & 1){
 			//Case 1: both rows and cols odd
-			for (uint r = 0; r<imgLabels.height; r += 2) {
+			for (unsigned r = 0; r<imgLabels.height; r += 2) {
 				// Get rows pointer
 				const uchar* const img_row = img.ptr(r);
 				const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.stepsize);
 
-				uint* const imgLabels_row = imgLabels.ptr(r);
-				uint* const imgLabels_row_fol = (uint *)(((char *)imgLabels_row) + imgLabels.stepsize);
+				unsigned* const imgLabels_row = imgLabels.ptr(r);
+				unsigned* const imgLabels_row_fol = (unsigned *)(((char *)imgLabels_row) + imgLabels.stepsize);
 				// Get rows pointer
-				for (uint c = 0; c<imgLabels.width; c += 2) {
+				for (unsigned c = 0; c<imgLabels.width; c += 2) {
 					int iLabel = imgLabels_row[c];
 					if (iLabel>0) {
 						iLabel = P[iLabel];
@@ -2038,15 +2038,15 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 		}//END Case 1
 		else{
 			//Case 2: only rows odd
-			for (uint r = 0; r<imgLabels.height; r += 2) {
+			for (unsigned r = 0; r<imgLabels.height; r += 2) {
 				// Get rows pointer
 				const uchar* const img_row = img.ptr(r);
 				const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.stepsize);
 
-				uint* const imgLabels_row = imgLabels.ptr(r);
-				uint* const imgLabels_row_fol = (uint *)(((char *)imgLabels_row) + imgLabels.stepsize);
+				unsigned* const imgLabels_row = imgLabels.ptr(r);
+				unsigned* const imgLabels_row_fol = (unsigned *)(((char *)imgLabels_row) + imgLabels.stepsize);
 				// Get rows pointer
-				for (uint c = 0; c<imgLabels.width; c += 2) {
+				for (unsigned c = 0; c<imgLabels.width; c += 2) {
 					int iLabel = imgLabels_row[c];
 					if (iLabel>0) {
 						iLabel = P[iLabel];
@@ -2084,15 +2084,15 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 	else{
 		if (imgLabels.width & 1){
 			//Case 3: only cols odd
-			for (uint r = 0; r<imgLabels.height; r += 2) {
+			for (unsigned r = 0; r<imgLabels.height; r += 2) {
 				// Get rows pointer
 				const uchar* const img_row = img.ptr(r);
 				const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.stepsize);
 
-				uint* const imgLabels_row = imgLabels.ptr(r);
-				uint* const imgLabels_row_fol = (uint *)(((char *)imgLabels_row) + imgLabels.stepsize);
+				unsigned* const imgLabels_row = imgLabels.ptr(r);
+				unsigned* const imgLabels_row_fol = (unsigned *)(((char *)imgLabels_row) + imgLabels.stepsize);
 				// Get rows pointer
-				for (uint c = 0; c<imgLabels.width; c += 2) {
+				for (unsigned c = 0; c<imgLabels.width; c += 2) {
 					int iLabel = imgLabels_row[c];
 					if (iLabel>0) {
 						iLabel = P[iLabel];
@@ -2128,15 +2128,15 @@ int BBDT_OPT(const Image &img, Image_<uint> &imgLabels) {
 		}// END case 3
 		else{
 			//Case 4: nothing odd
-			for (uint r = 0; r < imgLabels.height; r += 2) {
+			for (unsigned r = 0; r < imgLabels.height; r += 2) {
 				// Get rows pointer
 				const uchar* const img_row = img.ptr(r);
 				const uchar* const img_row_fol = (uchar *)(((char *)img_row) + img.stepsize);
 
-				uint* const imgLabels_row = imgLabels.ptr(r);
-				uint* const imgLabels_row_fol = (uint *)(((char *)imgLabels_row) + imgLabels.stepsize);
+				unsigned* const imgLabels_row = imgLabels.ptr(r);
+				unsigned* const imgLabels_row_fol = (unsigned *)(((char *)imgLabels_row) + imgLabels.stepsize);
 				// Get rows pointer
-				for (uint c = 0; c<imgLabels.width; c += 2) {
+				for (unsigned c = 0; c<imgLabels.width; c += 2) {
 					int iLabel = imgLabels_row[c];
 					if (iLabel>0) {
 						iLabel = P[iLabel];
