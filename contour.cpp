@@ -40,10 +40,10 @@ vector<vector<Point>> find_out_contour_lable_seq(const Image& img)
 {
 	vector<vector<Point>> contours;
 	uchar lable = 0;
-	for (uint i = 0; i < img.height; i++)
+	for (unsigned i = 0; i < img.height; i++)
 	{
 		uchar* p = img.ptr(i);
-		for (uint j = 0; j < img.width; j++)
+		for (unsigned j = 0; j < img.width; j++)
 		{
 			if (p[j] > lable)
 			{
@@ -56,7 +56,7 @@ vector<vector<Point>> find_out_contour_lable_seq(const Image& img)
 				{
 					Point neighbor = dot.at_direction(dir);
 					int n = 0;
-					while (*img.ptr(neighbor.y, neighbor.x) == 0 || neighbor.x < 0 || (uint)neighbor.x >= img.width || neighbor.y < 0 || (uint)neighbor.y >= img.height)
+					while (*img.ptr(neighbor.y, neighbor.x) == 0 || neighbor.x < 0 || (unsigned)neighbor.x >= img.width || neighbor.y < 0 || (unsigned)neighbor.y >= img.height)
 					{
 						n++;
 						if (n == 8)  goto end_of_tracing;
@@ -78,15 +78,15 @@ vector<vector<Point>> find_out_contour_lable_seq(const Image& img)
 }
 
 // 标记不一定按顺序
-vector<vector<Point>> find_out_contour_label_not_seq(const Image_<uint>& img, const int& size)
+vector<vector<Point>> find_out_contour_label_not_seq(const Image_<unsigned>& img, const int& size)
 {
 	vector<vector<Point>> contours(size);
 	uchar* lable = new uchar[size + 1]();
 	lable[0] = 1;
-	for (uint i = 0; i < img.height; i++)
+	for (unsigned i = 0; i < img.height; i++)
 	{
-		uint* p = img.ptr(i);
-		for (uint j = 0; j < img.width; j++)
+		unsigned* p = img.ptr(i);
+		for (unsigned j = 0; j < img.width; j++)
 		{
 			if (lable[p[j]] == 0)
 			{
@@ -98,7 +98,7 @@ vector<vector<Point>> find_out_contour_label_not_seq(const Image_<uint>& img, co
 				{
 					Point neighbor = dot.at_direction(dir);
 					int n = 0;
-					while (*img.ptr(neighbor.y, neighbor.x) == 0 || neighbor.x < 0 || (uint)neighbor.x >= img.width || neighbor.y < 0 || (uint)neighbor.y >= img.height)
+					while (*img.ptr(neighbor.y, neighbor.x) == 0 || neighbor.x < 0 || (unsigned)neighbor.x >= img.width || neighbor.y < 0 || (unsigned)neighbor.y >= img.height)
 					{
 						n++;
 						if (n == 8)  goto end_of_tracing;
