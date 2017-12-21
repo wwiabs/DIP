@@ -2,6 +2,7 @@
 #include "image.h"
 #include <vector>
 
+typedef unsigned short ushort;
 
 #define ICV_PUSH( Y, L, R, PREV_L, PREV_R, DIR )  \
 	{                                                 \
