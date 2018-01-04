@@ -911,7 +911,7 @@
 //}
 
 inline static
-void firstScanBBDT_OPT(const Image &img, Image_<unsigned>& imgLabels, unsigned* P, unsigned &lunique) {
+void firstScanBBDT_OPT(const Image& img, Image_<unsigned>& imgLabels, unsigned* P, unsigned& lunique) {
 	int w(img.width), h(img.height);
 
 	for (int r = 0; r<h; r += 2) {
@@ -1963,7 +1963,7 @@ void firstScanBBDT_OPT(const Image &img, Image_<unsigned>& imgLabels, unsigned* 
 
 }
 
-int BBDT_OPT(const Image &img, Image_<unsigned> &imgLabels) {
+int BBDT_OPT(const Image& img, Image_<unsigned>& imgLabels) {
 	//A quick and dirty upper bound for the maximimum number of labels.
 	const size_t Plength = (img.height + 1) * (img.width + 1) / 4;
 	//Tree of labels
