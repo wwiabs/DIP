@@ -1,4 +1,3 @@
-#include "basic_shape.h"
 #include "image.h"
 #include <vector>
 
