@@ -2,7 +2,8 @@
 #include <random>
 
 using std::vector;
-
+namespace
+{
 std::random_device rd;
 
 std::default_random_engine randGen(rd());
@@ -78,7 +79,7 @@ Circle2d makeSmallestEnclosingCircleOnePoint(const vector<Point> &points, size_t
 	}
 	return c;
 }
-
+}
 // Initially: No boundary points known
 Circle2d makeSmallestEnclosingCircle(const vector<Point> &points) {
 	// Clone list to preserve the caller's data, randomize order
