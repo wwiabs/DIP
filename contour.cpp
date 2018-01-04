@@ -1,4 +1,3 @@
-#include "basic_shape.h"
 #include <vector>
 #include "image.h"
 
@@ -36,13 +35,13 @@ using std::vector;
 }
 
 //找外轮廓  外轮廓标记按顺序排列
-vector<vector<Point>> find_out_contour_lable_seq(const Image& img)
+vector<vector<Point>> find_out_contour_lable_seq(const Image_<unsigned>& img)
 {
 	vector<vector<Point>> contours;
-	uchar lable = 0;
+	unsigned lable = 0;
 	for (unsigned i = 0; i < img.height; i++)
 	{
-		uchar* p = img.ptr(i);
+		unsigned *p = img.ptr(i);
 		for (unsigned j = 0; j < img.width; j++)
 		{
 			if (p[j] > lable)
@@ -56,11 +55,14 @@ vector<vector<Point>> find_out_contour_lable_seq(const Image& img)
 				{
 					Point neighbor = dot.at_direction(dir);
 					int n = 0;
-					while (*img.ptr(neighbor.y, neighbor.x) == 0 || neighbor.x < 0 || (unsigned)neighbor.x >= img.width || neighbor.y < 0 || (unsigned)neighbor.y >= img.height)
+					while (*img.ptr(neighbor) == 0 || neighbor.x < 0 || (unsigned)neighbor.x >= img.width || neighbor.y < 0 || (unsigned)neighbor.y >= img.height)
 					{
 						n++;
 						if (n == 8)  goto end_of_tracing;
-						dir < 7 ? dir++ : dir = 0;
+						if(dir < 7)
+							dir++;
+						else 
+							dir = 0;
 						neighbor = dot.at_direction(dir);
 					}
 
@@ -98,7 +100,7 @@ vector<vector<Point>> find_out_contour_label_not_seq(const Image_<unsigned>& img
 				{
 					Point neighbor = dot.at_direction(dir);
 					int n = 0;
-					while (*img.ptr(neighbor.y, neighbor.x) == 0 || neighbor.x < 0 || (unsigned)neighbor.x >= img.width || neighbor.y < 0 || (unsigned)neighbor.y >= img.height)
+					while (*img.ptr(neighbor) == 0 || neighbor.x < 0 || (unsigned)neighbor.x >= img.width || neighbor.y < 0 || (unsigned)neighbor.y >= img.height)
 					{
 						n++;
 						if (n == 8)  goto end_of_tracing;
