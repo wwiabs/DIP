@@ -213,7 +213,7 @@ public:
 
 		BGRA* ColorTable = new BGRA[ColorTableSize]; // std::bad_alloc exception should be thrown if memory is not available
 
-		file.read((char*)ColorTable, sizeof(BGRA)* m_BitmapHeader.ClrUsed);
+		file.read((char*)ColorTable, sizeof(BGRA)* ColorTableSize);
 
 		/* ... Color Table for 16 bits images are not supported yet */
 
