@@ -55,13 +55,13 @@ public:
 typedef Image_<uchar> Image;
 typedef Image_<double> Image2d;
 
-template <class T> class Region_
-{
-public:
-	int x;
-	int y;
-	Image_<T> img;
-};
+//template <class T> class Region_
+//{
+//public:
+//	int x;
+//	int y;
+//	Image_<T> img;
+//};
 
 
 const static char* get_suffix(const char* filename)
