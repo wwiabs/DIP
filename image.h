@@ -80,7 +80,7 @@ template <class T> Image_<T>::Image_()
 	data = nullptr;
 }
 
-template <class T> Image_<T>::Image_(const char* filename)
+template <class T> Image_<T>::Image_(const char* filename) :Image_()
 {
 	open(filename);
 }
