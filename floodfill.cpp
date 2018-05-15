@@ -42,7 +42,7 @@ struct FFillSegment
 };
 
 
-void floodFill(Image& image, int _x, int _y, uchar newVal, int flags)
+void floodFill(Image& image, int _x, int _y, uchar newVal, uchar flags)
 {
 	if (*image.ptr(_y, _x) == newVal) return /*Rect()*/;
 	std::vector<FFillSegment> buffer;
@@ -64,8 +64,8 @@ void floodFill(Image& image, int _x, int _y, uchar newVal, int flags)
 	while (--L >= 0 && img[L] == val0)
 		img[L] = newVal;
 
-	//XMax = --R;
-	//XMin = ++L;
+	/*XMax =*/ --R;
+	/*XMin =*/ ++L;
 
 	ICV_PUSH(_y, L, R, R + 1, R, 1);
 
