@@ -1,7 +1,7 @@
-#pragma once
+﻿#pragma once
 
-#ifndef BASIC_SHAPE_H
-#define BASIC_SHAPE_H
+#ifndef BASIC_SHAPE_H_
+#define BASIC_SHAPE_H_
 
 #include <algorithm>
 
@@ -65,7 +65,7 @@ public:
 	//T area() const;
 
 	// 判断矩形是否包含点
-	//bool contains(const Point_<T>& pt) const;
+	bool contains(const Point_<T>& pt) const;
 
 	//! conversion to another data type
 	template<class T2> operator Rect_<T2>() const;
@@ -98,7 +98,7 @@ public:
 	// 圆是否包含点
 	bool contains(const Point_<T>& pt) const;
 	// 圆面积 ，返回double类型
-	double area() const;
+	//double area() const;
 	//! 判断是否为空 ,空则true
 	//bool empty() const;
 	//! conversion to another data type
@@ -166,7 +166,7 @@ Point_<T>::operator Point_<T2>() const
 template<class T1, class T2> static inline
 double distance(const Point_<T1>& pt1, const Point_<T2>& pt2)
 {
-	return std::sqrt((double)(pt1.x - pt2.x)*(pt1.x - pt2.x) + (double)(pt1.y - pt2.y)*(pt1.y - pt2.y));
+	return /*std::*/sqrt((double)(pt1.x - pt2.x)*(pt1.x - pt2.x) + (double)(pt1.y - pt2.y)*(pt1.y - pt2.y));
 }
 
 template<class T> inline
@@ -195,41 +195,40 @@ template<class T> inline
 	}
 }
 
-template<class T> static inline
-	T dot(const Point_<T>& pt1, const Point_<T>& pt2)
-{
-	return static_cast<T>(pt1.x*pt2.x + pt1.y*pt2.y);
-}
-
+//template<class T> static inline
+//	T dot(const Point_<T>& pt1, const Point_<T>& pt2)
+//{
+//	return static_cast<T>(pt1.x*pt2.x + pt1.y*pt2.y);
+//}
+//
 template<class T> static inline
 	double cross(const Point_<T>& pt1, const Point_<T>& pt2)
 {
 	return double(pt1.x*pt2.y - pt1.y*pt2.x);
 }
-
-template<class T> static inline
-	Point_<T>& operator += (Point_<T>& a, const Point_<T>& b)
-{
-	a.x += b.x;
-	a.y += b.y;
-	return a;
-}
-
-template<class T> static inline
-	Point_<T>& operator -= (Point_<T>& a, const Point_<T>& b)
-{
-	a.x -= b.x;
-	a.y -= b.y;
-	return a;
-}
-
-
-template<class T> static inline
-	bool operator == (const Point_<T>& a, const Point_<T>& b)
-{
-	return a.x == b.x && a.y == b.y;
-}
-
+//
+//template<class T> static inline
+//	Point_<T>& operator += (Point_<T>& a, const Point_<T>& b)
+//{
+//	a.x += b.x;
+//	a.y += b.y;
+//	return a;
+//}
+//
+//template<class T> static inline
+//	Point_<T>& operator -= (Point_<T>& a, const Point_<T>& b)
+//{
+//	a.x -= b.x;
+//	a.y -= b.y;
+//	return a;
+//}
+//
+//template<class T> static inline
+//	bool operator == (const Point_<T>& a, const Point_<T>& b)
+//{
+//	return a.x == b.x && a.y == b.y;
+//}
+//
 template<class T> static inline
 	bool operator != (const Point_<T>& a, const Point_<T>& b)
 {
@@ -247,12 +246,12 @@ template<class T> static inline
 {
 	return Point_<T>(static_cast<T>(a.x - b.x), static_cast<T>(a.y - b.y));
 }
-
-template<class T> static inline
-	Point_<T> operator - (const Point_<T>& a)
-{
-	return Point_<T>(static_cast<T>(-a.x), static_cast<T>(-a.y));
-}
+//
+//template<class T> static inline
+//	Point_<T> operator - (const Point_<T>& a)
+//{
+//	return Point_<T>(static_cast<T>(-a.x), static_cast<T>(-a.y));
+//}
 
 
 //////////////////////////////////////////////////////////////////Rect_////////////////////////////////////////////////////////
@@ -277,13 +276,13 @@ template<class T> template<class T2> inline
 //	x = rect.x; y = rect.y; width = rect.width; height = rect.height;
 //	return *this;
 //}
-//
-//template<class T> inline
-//	bool Rect_<T>::contains(const Point_<T>& pt) const
-//{
-//	return x <= pt.x && pt.x < x + width && y <= pt.y && pt.y < y + height;
-//}
-//
+
+template<class T> inline
+	bool Rect_<T>::contains(const Point_<T>& pt) const
+{
+	return x <= pt.x && pt.x < x + width && y <= pt.y && pt.y < y + height;
+}
+
 //template<class T> static inline
 //	Rect_<T>& operator += (Rect_<T>& a, const Point_<T>& b)
 //{
@@ -333,18 +332,18 @@ template<class T> static inline
 }
 
 
-template<class T> static inline
-	bool operator == (const Rect_<T>& a, const Rect_<T>& b)
-{
-	return a.x == b.x && a.y == b.y && a.width == b.width && a.height == b.height;
-}
-
-template<class T> static inline
-	bool operator != (const Rect_<T>& a, const Rect_<T>& b)
-{
-	return a.x != b.x || a.y != b.y || a.width != b.width || a.height != b.height;
-}
-
+//template<class T> static inline
+//	bool operator == (const Rect_<T>& a, const Rect_<T>& b)
+//{
+//	return a.x == b.x && a.y == b.y && a.width == b.width && a.height == b.height;
+//}
+//
+//template<class T> static inline
+//	bool operator != (const Rect_<T>& a, const Rect_<T>& b)
+//{
+//	return a.x != b.x || a.y != b.y || a.width != b.width || a.height != b.height;
+//}
+//
 //template<class T> static inline
 //	Rect_<T> operator + (const Rect_<T>& a, const Point_<T>& b)
 //{
@@ -405,25 +404,24 @@ template <class T> inline
 {
 	return distance(Point_<T>(x, y), pt) < radius + EPS;
 }
-
-template <class T> inline
-	double Circle_<T>::area() const
-{
-	return PI * radius * radius;
-}
-
-
-template<class T> static inline
-	bool operator == (const Circle_<T>& a, const Circle_<T>& b)
-{
-	return a.x == b.x && a.y == b.y && a.radius == b.radius;
-}
-
-template<class T> static inline
-	bool operator != (const Circle_<T>& a, const Circle_<T>& b)
-{
-	return a.x != b.x || a.y != b.y || a.radius != b.radius;
-}
+//
+//template <class T> inline
+//	double Circle_<T>::area() const
+//{
+//	return PI * radius * radius;
+//}
+//
+//template<class T> static inline
+//	bool operator == (const Circle_<T>& a, const Circle_<T>& b)
+//{
+//	return a.x == b.x && a.y == b.y && a.radius == b.radius;
+//}
+//
+//template<class T> static inline
+//	bool operator != (const Circle_<T>& a, const Circle_<T>& b)
+//{
+//	return a.x != b.x || a.y != b.y || a.radius != b.radius;
+//}
 
 
 
