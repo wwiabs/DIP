@@ -28,10 +28,12 @@
 
 void cal_hist(const Image& img, unsigned* hist)
 {
-	for (unsigned r = 0; r < img.height; r++)
+	unsigned r, c;
+	uchar* p;
+	for (r = 0; r < img.height; r++)
 	{
-		uchar* p = img.ptr(r);
-		for (unsigned c = 0; c < img.width; c++)
+		p = img.ptr(r);
+		for (c = 0; c < img.width; c++)
 		{
 			hist[*p]++;
 			p++;
