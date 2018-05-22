@@ -124,7 +124,7 @@ void floodFill(Image* image, int _x, int _y, uchar newVal, uchar flags)
 //#define OTHER 0x10
 
 // clockwise
-static inline int get_label(int pre, int next, uchar* label)
+static inline int get_edge_label(int pre, int next, uchar* label)
 {
 	switch (next)
 	{
@@ -216,7 +216,7 @@ static inline int get_chaincode(const Point& pre, const Point& next)
 }
 
 // doi:10.1016/j.cag.2005.03.005
-static int label_contour(Image* img, const vector<Point>& pts)
+static int edge_labeling_contour(Image* img, const vector<Point>& pts)
 {
 	int pre, next;
 	if (pts.size() == 1)
@@ -230,12 +230,12 @@ static int label_contour(Image* img, const vector<Point>& pts)
 		for (size_t i = 1; i < pts.size() - 1; i++)
 		{
 			next = get_chaincode(pts[i], pts[i + 1]);
-			if (get_label(pre, next, img->ptr(pts[i])) == -1)
+			if (get_edge_label(pre, next, img->ptr(pts[i])) == -1)
 				return -1;
 			pre = next;
 		}
 		next = get_chaincode(pts[0], pts[1]);
-		if (get_label(pre, next, img->ptr(pts[0])) == -1)
+		if (get_edge_label(pre, next, img->ptr(pts[0])) == -1)
 			return -1;
 	}
 	return 0;
@@ -247,7 +247,7 @@ int fill_contour(Image* img, const vector<vector<Point> >& pts, uchar value)
 	uchar* p;
 	for (size_t i = 0; i < pts.size(); i++)
 	{
-		if (label_contour(img, pts[i]) == -1)
+		if (edge_labeling_contour(img, pts[i]) == -1)
 			return -1;
 	}
 	for (unsigned r = 0; r < img->height; r++)
