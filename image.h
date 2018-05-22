@@ -101,11 +101,9 @@ template <class T> Image_<T>::Image_(unsigned _width, unsigned _height, uchar _c
 }
 
 template <class T> Image_<T>::Image_(uchar* p, unsigned _width, unsigned _height, uchar _channel)
-:width(_width), height(_height), channel(_channel), bpp(sizeof(T)* _channel * 8), stepsize(_width * sizeof(T)* _channel)
+:width(_width), height(_height), channel(_channel), bpp(sizeof(T)* _channel * 8), stepsize(_width * sizeof(T)* _channel), start(p), data(p)
 {
-	start = data = new uchar[height * stepsize];
-	count = new int(1);
-	memcpy(start, p, height * stepsize);
+	count = new int(0);
 }
 
 template <class T> Image_<T>::Image_(const Image_& img, bool copy)
@@ -158,21 +156,21 @@ template <class T> template <class T2> Image_<T>::Image_(const Image_<T2>& img)
 template <class T> void Image_<T>::release()
 {
 	if (count != nullptr && *count > 1)
-	{
 		(*count)--;
-	}
-	else
+	else if (count != nullptr && *count == 1)
 	{
 		if (start != nullptr)
 		{
 			delete[] start;
 			start = nullptr;
 		}
-		if (count != nullptr)
-		{
-			delete count;
-			count = nullptr;
-		}
+		delete count;
+		count = nullptr;
+	}
+	else if (count != nullptr && *count == 0)
+	{
+		delete count;
+		count = nullptr;
 	}
 }
 
