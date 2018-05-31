@@ -25,7 +25,7 @@ public:
 	Image_();
 	Image_(const char* filename);
 	Image_(unsigned _width, unsigned _height, uchar _channel = 1, bool init_value = false, T _value = 0);
-	Image_(uchar* p, unsigned _width, unsigned _height, uchar _channel = 1);
+	Image_(uchar* p, unsigned _width, unsigned _height, uchar _channel = 1, bool copy = true);
 	Image_(const Image_& img, bool copy = true);    //初始化
 	template<class T2> Image_(const Image_<T2>& img);   //类型转换
 	void release();
@@ -100,10 +100,20 @@ template <class T> Image_<T>::Image_(unsigned _width, unsigned _height, uchar _c
 	}
 }
 
-template <class T> Image_<T>::Image_(uchar* p, unsigned _width, unsigned _height, uchar _channel)
-:width(_width), height(_height), channel(_channel), bpp(sizeof(T)* _channel * 8), stepsize(_width * sizeof(T)* _channel), start(p), data(p)
+template <class T> Image_<T>::Image_(uchar* p, unsigned _width, unsigned _height, uchar _channel, bool copy)
+:width(_width), height(_height), channel(_channel), bpp(sizeof(T)* _channel * 8), stepsize(_width * sizeof(T)* _channel)
 {
-	count = new int(0);
+	if (copy)
+	{
+		start = data = new uchar[stepsize * height];
+		memcpy(start, p, stepsize * height);
+		count = new int(1);
+	}
+	else
+	{
+		start = data = p;
+		count = nullptr;
+	}
 }
 
 template <class T> Image_<T>::Image_(const Image_& img, bool copy)
@@ -164,11 +174,6 @@ template <class T> void Image_<T>::release()
 			delete[] start;
 			start = nullptr;
 		}
-		delete count;
-		count = nullptr;
-	}
-	else if (count != nullptr && *count == 0)
-	{
 		delete count;
 		count = nullptr;
 	}
