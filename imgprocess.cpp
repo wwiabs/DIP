@@ -1,6 +1,11 @@
 ﻿#include "image.h"
 #include "fftw3.h"
-#include "imgprocess.h"
+
+#define MUL_ADD_STEP(p1, step1, p2, step2, l, s)	{for (unsigned _i = 0; _i < l; _i++) s += (p1)[_i*(step1)] * (p2)[_i*(step2)]; }
+#define MUL_ADD(p1, p2, l, s)	{for (unsigned _i = 0; _i < l; _i++) s += (p1)[_i] * (p2)[_i]; }
+#define ADD(p, l, s)	{for (unsigned _i = 0; _i < l; _i++) s += (p)[_i]; }
+#define ADD_STEP(p, step, l, s)	{for (unsigned _i = 0; _i < l; _i++) {s += (p)[_i*(step)];}}
+#define ZERO(p, l)     {for (unsigned _i = 0; _i < l; _i++) (p)[_i] = 0; }
 
 using namespace std;
 #pragma comment(lib,"D:/include/libfftw3-3.lib")
@@ -112,8 +117,6 @@ void fftw_backward(const Image2d& _mag, const Image2d& _arg, Image* img)
 	fftw_free(spat);
 	fftw_free(freq);
 }
-
-
 
 enum THRESHOLD_TYPE
 {
@@ -233,5 +236,51 @@ int mean_filter(uchar* ps, unsigned w, unsigned h, unsigned ss, unsigned mw, uns
 		}
 	}
 	delete[] psum;
+	return 0;
+}
+
+int correlation(uchar* psrc, unsigned w, unsigned h, unsigned stepsrc, char* mask, unsigned mw, unsigned mh, uchar* pdst, unsigned stepdst)
+{
+	if (mw > w || mh > h)
+		return -1;
+	int ms(0), s;
+	unsigned r, c, i;
+	uchar *ptsrcmy, *ptdsty, *ptsrcy;
+	char *ptmsky;
+	ADD(mask, mw*mh, ms);
+
+	bool bms = ms != 1 && ms != 0;
+
+	for (r = 0; r < mh / 2; r++)
+		ZERO(ROW_HEAD(pdst, r, stepdst), w);
+
+	for (; r < h - mh / 2; r++)
+	{
+		ZERO(ROW_HEAD(pdst, r, stepdst), mw / 2);
+		ZERO(GRAY_ROW_COL(pdst, r, w - mw / 2, stepdst), mw / 2);
+	}
+	for (; r < h; r++)
+		ZERO(ROW_HEAD(pdst, r, stepdst), w);
+
+	for (r = mh / 2; r < h - mh / 2; r++)
+	{
+		ptdsty = GRAY_ROW_COL(pdst, r, mw / 2, stepdst);
+		ptsrcy = ROW_HEAD(psrc, r - mh / 2, stepsrc);
+		for (c = mw / 2; c < w - mw / 2; c++)
+		{
+			s = 0;
+			ptmsky = mask;
+			ptsrcmy = ptsrcy++;
+			for (i = 0; i < mh; i++)
+			{
+				MUL_ADD(ptsrcmy, ptmsky, mw, s);
+				ptmsky += mw;
+				ptsrcmy += stepsrc;
+			}
+			if (bms)
+				s = (s + ms / 2) / ms;
+			*ptdsty++ = s;
+		}
+	}
 	return 0;
 }
