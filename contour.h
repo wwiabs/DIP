@@ -154,17 +154,21 @@ vector<vector<Point> > find_out_contour(const Image_<T>& img, int size)
 					find_adjacent_pt(img, rect, dot, &neighbor, &dir);
 					dot = neighbor;
 					contour.push_back(dot);
-					GET_NEXT_TRACING_DIR(dir)
+					GET_NEXT_TRACING_DIR(dir);
 				} while (dot != first);
 				dirchk = dir;
 				neighbor = dot.at_direction(dirchk);
 				find_adjacent_pt(img, rect, dot, &neighbor, &dirchk);
-				if (neighbor != contour[1]) goto start;
+				if (neighbor != contour[1]) 
+					goto start;
 			end_of_tracing: label[*p] = 1;
+				if (--size == 0)
+					goto end_loop;
 			}
 			p++;
 		}
 	}
+	end_loop:
 	delete[] label;
 	return contours;
 }
@@ -203,13 +207,16 @@ vector<vector<Point> > find_in_contour(const Image_<T>& img, int size)
 					else dir = 7;
 					dot = dot.at_direction(dir);
 					contour.push_back(dot);
-					GET_NEXT_TRACING_DIR(dir)
+					GET_NEXT_TRACING_DIR(dir);
 				} while (dot != first);
 				label[*p] = 1;
+				if (--size == 0)
+					goto end_loop;
 			}
 			p++;
 		}
 	}
+end_loop:
 	delete[] label;
 	return contours;
 }
