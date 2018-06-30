@@ -34,10 +34,7 @@ void cal_hist(const Image& img, unsigned* hist)
 	{
 		p = img.ptr(r);
 		for (c = 0; c < img.width; c++)
-		{
-			hist[*p]++;
-			p++;
-		}
+			hist[*p++]++;
 	}
 }
 
