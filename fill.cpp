@@ -1,7 +1,6 @@
 ﻿#include "image.h"
 #include <vector>
 using std::vector;
-using std::pair;
 
 typedef unsigned short ushort;
 
@@ -52,7 +51,7 @@ void floodFill(Image* image, int _x, int _y, uchar newVal, uchar flags)
 	uchar* img = image->ptr(_y);
 	int i, L, R;
 	//int XMin, XMax, YMin = _y, YMax = _y;
-	int _8_connectivity = (flags & 255) == 8;
+	int _8_connectivity = (flags & 0xff) == 8;
 	FFillSegment* buffer_end = &buffer.front() + buffer.size(), *head = &buffer.front(), *tail = &buffer.front();
 
 	L = R /*= XMin = XMax*/ = _x;
@@ -257,12 +256,21 @@ int fill_contour(Image* img, const vector<vector<Point> >& pts, uchar value)
 		{
 			if (*p & LEFT)
 				st = c;
-			if (*p & RIGHT)
+			if (*p++ & RIGHT)
 			{
 				memset(img->ptr(r, st), value, c - st + 1);
 			}
-			p++;
 		}
 	}
+	return 0;
+}
+
+int fill_Rect(Image* img, const Rect& rect, uchar v)
+{
+	if (rect.x < 0 || rect.y < 0 || rect.y + rect.height >(int)img->height || rect.x + rect.width >(int)img->width)
+		return -1;
+
+	for (int r = rect.y; r < rect.y + rect.height; r++)
+		memset(img->ptr(r, rect.x), v, rect.width);
 	return 0;
 }
