@@ -1,5 +1,9 @@
 ﻿#include "image.h"
 #include "fftw3.h"
+#include "imgprocess.h"
+
+using namespace std;
+#pragma comment(lib,"D:/include/libfftw3-3.lib")
 
 void fftw_forward(const Image& img, Image2d* _mag, Image2d* _arg)
 {
@@ -31,6 +35,7 @@ void fftw_forward(const Image& img, Image2d* _mag, Image2d* _arg)
 		double *temp_a = _arg->ptr(r);
 		for (c = 0; c < w / 2 + 1; c++)
 		{
+			cout << freq[k][0] << '\t' << freq[k][1] << endl;
 			*temp_m++ = sqrt(freq[k][0] * freq[k][0] + freq[k][1] * freq[k][1]);
 			*temp_a++ = atan2(freq[k][1], freq[k][0]);
 			//cout << sqrt(freq[k][0] * freq[k][0] + freq[k][1] * freq[k][1]) << endl;
@@ -99,7 +104,7 @@ void fftw_backward(const Image2d& _mag, const Image2d& _arg, Image* img)
 		uchar *temp = img->ptr(r);
 		for (c = 0; c < w; c++)
 		{
-			*temp++ = spat[k] / N;
+			*temp++ =uchar(spat[k] / N);
 			k++;
 		}
 	}
@@ -157,4 +162,76 @@ void threshold(Image* img, int type, uchar th, uchar v)
 	default:
 		break;
 	}
+}
+
+int mean_filter(uchar* ps, unsigned w, unsigned h, unsigned ss, unsigned mw, unsigned mh, uchar* pd, unsigned ds)
+{
+	unsigned r, c, s, *psum, *psumt, *psumy, *pt5, ml(mw*mh), *pt7, *pt8, sw(w - mw + 1);
+	uchar* pt1, *pt2;
+
+	for (r = 0; r < mh / 2; r++)
+		ZERO(ROW_HEAD(pd, r, ds), w);
+
+	for (; r < h - mh / 2; r++)
+	{
+		ZERO(ROW_HEAD(pd, r, ds), mw / 2);
+		ZERO(GRAY_ROW_COL(pd, r, w - mw / 2, ds), mw / 2);
+	}
+	for (; r < h; r++)
+		ZERO(ROW_HEAD(pd, r, ds), w);
+
+	psum = new unsigned[sw*(mh + 1)];
+
+	for (r = 0; r < mh; r++)
+	{
+		pt1 = ROW_HEAD(ps, r, ss);
+		pt2 = pt1 + mw;
+		pt5 = ROW_HEAD(psum, r%mh, sw);
+		s = 0;
+		ADD(pt1, mw, s);
+		for (c = mw / 2; c < w - mw / 2 - 1; c++)
+		{
+			*pt5++ = s;
+			s += *pt2++ - *pt1++;
+		}
+		*pt5 = s;
+	}
+
+	pt1 = GRAY_ROW_COL(pd, mh / 2, mw / 2, ds);
+	pt5 = psum;
+	pt7 = psumt = ROW_HEAD(psum, mh, sw);
+	for (c = 0; c < sw; c++)
+	{
+		s = 0;
+		ADD_STEP(pt5, sw, mh, s);
+		*pt7++ = s - *pt5++;
+		*pt1++ = (s + ml / 2) / ml;
+	}
+	for (; r < h; r++)
+	{
+		pt1 = ROW_HEAD(ps, r, ss);
+		pt2 = pt1 + mw;
+		pt5 = psumy = ROW_HEAD(psum, r%mh, sw);
+		s = 0;
+		ADD(pt1, mw, s);
+		for (c = mw / 2; c < w - mw / 2 - 1; c++)
+		{
+			*pt5++ = s;
+			s += *pt2++ - *pt1++;
+		}
+		*pt5 = s;
+
+		pt5 = psumy;
+		pt7 = psumt;
+		pt8 = ROW_HEAD(psum, (r + 1)%mh, sw);  //oldest
+		pt1 = GRAY_ROW_COL(pd, r - mh / 2, mw / 2, ds);
+		for (c = 0; c < sw; c++)
+		{
+			*pt7 += *pt5++;
+			*pt1++ = (*pt7 + ml / 2) / ml;
+			*pt7++ -= *pt8++;
+		}
+	}
+	delete[] psum;
+	return 0;
 }

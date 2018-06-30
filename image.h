@@ -9,6 +9,9 @@
 //#include "lpng1634/png.h"
 typedef unsigned char uchar;
 
+#define ROW_HEAD(st, r, bytepr)  (st + (r) * (bytepr))
+#define ROW_COL(st, r, c, bytepr, bytepp) (st + (r) * (bytepr) + (c) * (bytepp))
+#define GRAY_ROW_COL(st, r, c, bytepr) (st + (r) * (bytepr) + c)
 //#ifdef _DEBUG
 //#pragma comment(lib,"./lpng1634/projects/vstudio/x64/Debug Library/libpng16.lib")
 //#pragma comment(lib,"./lpng1634/projects/vstudio/x64/Debug Library/zlib.lib")
