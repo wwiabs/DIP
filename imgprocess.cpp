@@ -8,7 +8,7 @@
 #define ZERO(p, l)     {for (unsigned _i = 0; _i < l; _i++) (p)[_i] = 0; }
 
 using namespace std;
-#pragma comment(lib,"D:/include/libfftw3-3.lib")
+#pragma comment(lib,"C:/d/fftw-3.3.5-dll64/libfftw3-3.lib")
 
 void fftw_forward(const Image& img, Image2d* _mag, Image2d* _arg)
 {
@@ -169,12 +169,13 @@ void threshold(Image* img, int type, uchar th, uchar v)
 
 int mean_filter(uchar* ps, unsigned w, unsigned h, unsigned ss, unsigned mw, unsigned mh, uchar* pd, unsigned ds)
 {
-	unsigned r, c, s, *psum, *psumt, *psumy, *pt5, ml(mw*mh), *pt7, *pt8, sw(w - mw + 1);
+	if (w > mw || h > mh)
+		return -1;
+	unsigned r, c, s, *psum, *psumt, *pt3, *pt4, *pt5, *pt6, ml(mw*mh), sw(w - mw + 1);
 	uchar* pt1, *pt2;
 
 	for (r = 0; r < mh / 2; r++)
 		ZERO(ROW_HEAD(pd, r, ds), w);
-
 	for (; r < h - mh / 2; r++)
 	{
 		ZERO(ROW_HEAD(pd, r, ds), mw / 2);
@@ -189,50 +190,50 @@ int mean_filter(uchar* ps, unsigned w, unsigned h, unsigned ss, unsigned mw, uns
 	{
 		pt1 = ROW_HEAD(ps, r, ss);
 		pt2 = pt1 + mw;
-		pt5 = ROW_HEAD(psum, r%mh, sw);
+		pt3 = ROW_HEAD(psum, r, sw);
 		s = 0;
 		ADD(pt1, mw, s);
-		for (c = mw / 2; c < w - mw / 2 - 1; c++)
+		for (c = 0; c < sw - 1; c++)
 		{
-			*pt5++ = s;
+			*pt3++ = s;
 			s += *pt2++ - *pt1++;
 		}
-		*pt5 = s;
+		*pt3 = s;
 	}
 
 	pt1 = GRAY_ROW_COL(pd, mh / 2, mw / 2, ds);
 	pt5 = psum;
-	pt7 = psumt = ROW_HEAD(psum, mh, sw);
+	pt6 = psumt = ROW_HEAD(psum, mh, sw);
 	for (c = 0; c < sw; c++)
 	{
 		s = 0;
 		ADD_STEP(pt5, sw, mh, s);
-		*pt7++ = s - *pt5++;
+		*pt6++ = s - *pt5++;
 		*pt1++ = (s + ml / 2) / ml;
 	}
 	for (; r < h; r++)
 	{
 		pt1 = ROW_HEAD(ps, r, ss);
 		pt2 = pt1 + mw;
-		pt5 = psumy = ROW_HEAD(psum, r%mh, sw);
+		pt5 = pt3 = ROW_HEAD(psum, r%mh, sw);
 		s = 0;
 		ADD(pt1, mw, s);
-		for (c = mw / 2; c < w - mw / 2 - 1; c++)
+		for (c = 0; c < sw - 1; c++)
 		{
 			*pt5++ = s;
 			s += *pt2++ - *pt1++;
 		}
 		*pt5 = s;
 
-		pt5 = psumy;
-		pt7 = psumt;
-		pt8 = ROW_HEAD(psum, (r + 1)%mh, sw);  //oldest
+		pt5 = pt3;
+		pt6 = psumt;
+		pt4 = ROW_HEAD(psum, (r + 1)%mh, sw);  //oldest
 		pt1 = GRAY_ROW_COL(pd, r - mh / 2, mw / 2, ds);
 		for (c = 0; c < sw; c++)
 		{
-			*pt7 += *pt5++;
-			*pt1++ = (*pt7 + ml / 2) / ml;
-			*pt7++ -= *pt8++;
+			*pt6 += *pt5++;
+			*pt1++ = (*pt6 + ml / 2) / ml;
+			*pt6++ -= *pt4++;
 		}
 	}
 	delete[] psum;
@@ -253,7 +254,6 @@ int correlation(uchar* psrc, unsigned w, unsigned h, unsigned stepsrc, char* mas
 
 	for (r = 0; r < mh / 2; r++)
 		ZERO(ROW_HEAD(pdst, r, stepdst), w);
-
 	for (; r < h - mh / 2; r++)
 	{
 		ZERO(ROW_HEAD(pdst, r, stepdst), mw / 2);
