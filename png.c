@@ -77,7 +77,7 @@ int read_png(const char* file_name, unsigned char* p, int* w, int* h)
 	return 0;
 }
 
-int write_png(const char *file_name, png_bytep p, int w, int h)
+int write_png(const char *file_name, unsigned char* p, int w, int h)
 {
 	FILE *fp;
 	png_structp png_ptr;
