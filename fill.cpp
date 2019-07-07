@@ -24,19 +24,19 @@ typedef struct _CONTOUR_PT_INFO
 	char dir;
 }CONTOUR_PT_INFO;
 
-static int labeling_contour(unsigned char* p, int w, int h, const vector<CONTOUR_PT_INFO>& pts)
+static int labeling_contour(unsigned char* p, int stride, const vector<CONTOUR_PT_INFO>& pts)
 {
 	int n = pts.size() - 1;
 	char label;
 	if (n == 0)
-		*GRAY_ROW_COL(p, pts[0].y, pts[0].x, w) = LEFT | RIGHT;
+		*GRAY_ROW_COL(p, pts[0].y, pts[0].x, stride) = LEFT | RIGHT;
 	else
 	{
 		for (int i = 0; i < n; i++)
 		{
 			if ((label = LM[pts[i].dir][pts[i+1].dir]) == -1)
 				return -1;
-			*GRAY_ROW_COL(p, pts[i].y, pts[i].x, w) |= label;
+			*GRAY_ROW_COL(p, pts[i].y, pts[i].x, stride) |= label;
 		}
 	}
 	return 0;
@@ -48,7 +48,7 @@ int fill_contour(unsigned char* p, int w, int h, const vector<vector<CONTOUR_PT_
 	memset(p, 0, w*h);
 	for (size_t i = 0; i < contours.size(); i++)
 	{
-		if (labeling_contour(p, w, h, contours[i]) == -1)
+		if (labeling_contour(p, w, contours[i]) == -1)
 			return -1;
 	}
 	for (int r = 0; r < h; r++)
