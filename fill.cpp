@@ -45,7 +45,6 @@ static int labeling_contour(unsigned char* p, int stride, const vector<CONTOUR_P
 int fill_contour(unsigned char* p, int w, int h, const vector<vector<CONTOUR_PT_INFO> >& contours, unsigned char value)
 {
 	int st;
-	memset(p, 0, w*h);
 	for (size_t i = 0; i < contours.size(); i++)
 	{
 		if (labeling_contour(p, w, contours[i]) == -1)
