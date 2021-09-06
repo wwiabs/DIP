@@ -54,4 +54,5 @@ static void crosspt(double x1, double y1, double x2, double y2, double x3, doubl
 	double G = A*E - B*D;
 	*x = (C*E - B*F) / G;
 	*y = (A*F - C*D) / G;
+	return;
 }
