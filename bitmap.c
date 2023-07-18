@@ -106,7 +106,7 @@ int read_bmp(const char* file_name, uint8_t* p, int* w, int* h)
 	return 0;
 }
 
-//ÄÚ´æÁ¬Ğø
+//Ã„ÃšÂ´Ã¦ÃÂ¬ÃÃ¸
 int write_bmp(const char* file_name, uint8_t* p, int w, int h)
 {
 	BITMAP_FILE_HEADER fh;
