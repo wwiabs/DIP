@@ -76,10 +76,10 @@ int read_bmp(const char* file_name, uint8_t* p, int* w, int* h)
 		return -1;
 	}
 	int32_t height = dibh.Height > 0 ? dibh.Height : -dibh.Height;
+	*w = dibh.Width;
+	*h = height;
 	if (p == NULL)
 	{
-		*w = dibh.Width;
-		*h = height;
 		fclose(fp);
 		return 0;
 	}
