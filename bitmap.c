@@ -36,12 +36,12 @@ typedef struct _BITMAP_INFO_HEADER {
 	//uint32_t GammaBlue;
 } BITMAP_INFO_HEADER;
 
-typedef struct _BGRA {
-	uint8_t Blue;
-	uint8_t Green;
-	uint8_t Red;
-	uint8_t Alpha;
-} BGRA;
+//typedef struct _BGRA {
+//	uint8_t Blue;
+//	uint8_t Green;
+//	uint8_t Red;
+//	uint8_t Alpha;
+//} BGRA;
 
 #pragma pack(pop)
 
@@ -119,7 +119,7 @@ int write_bmp(const char* file_name, uint8_t* p, int w, int h)
 	if (fp == NULL)
 		return -1;	
 	fh.Signature = BITMAP_SIGNATURE;
-	fh.BitsOffset = sizeof(BITMAP_FILE_HEADER)+sizeof(BITMAP_INFO_HEADER)+sizeof(BGRA)* 256;
+	fh.BitsOffset = sizeof(BITMAP_FILE_HEADER)+sizeof(BITMAP_INFO_HEADER);
 	fh.Reserved = 0;
 	fh.Size = ((w + 3)&~3)*h + fh.BitsOffset;
 	fwrite(&fh, 1, sizeof(BITMAP_FILE_HEADER), fp);
@@ -132,18 +132,18 @@ int write_bmp(const char* file_name, uint8_t* p, int w, int h)
 	dibh.SizeImage = 0;
 	dibh.PelsPerMeterX = 0;
 	dibh.PelsPerMeterY = 0;
-	dibh.ClrUsed = 0;
+	dibh.ClrUsed = 256;
 	dibh.ClrImportant = 0;
 	fwrite(&dibh, 1, sizeof(BITMAP_INFO_HEADER), fp);
-	BGRA Palette[256];
-	for (int i = 0; i < 256; i++)
-	{
-		Palette[i].Alpha = 0x00;
-		Palette[i].Blue = i;
-		Palette[i].Green = i;
-		Palette[i].Red = i;
-	}
-	fwrite(Palette, sizeof(BGRA), 256, fp);
+	//BGRA Palette[256];
+	//for (int i = 0; i < 256; i++)
+	//{
+	//	Palette[i].Alpha = 0x00;
+	//	Palette[i].Blue = i;
+	//	Palette[i].Green = i;
+	//	Palette[i].Red = i;
+	//}
+	//fwrite(Palette, sizeof(BGRA), 256, fp);
 	int32_t padding = ((w + 3) & ~3) - w;
 	uint8_t tmp[4] = {0};
 	for (int r = h - 1; r >= 0; r--)
